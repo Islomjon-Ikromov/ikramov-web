@@ -6,3 +6,10 @@ export const users = pgTable("users", {
   name: text("name"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const waitlist = pgTable("waitlist", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  telegram: text("telegram"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
