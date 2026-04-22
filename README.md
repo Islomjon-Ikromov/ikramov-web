@@ -2,6 +2,7 @@
 
 Production web app for ikramov.uz — built on Next.js (App Router) + Tailwind + Neon Postgres, deployed on Vercel.
 
+> **Repo**: https://github.com/Islomjon-Ikromov/ikramov-web
 > **Live URL**: _to be added after Vercel project link_
 
 ## Stack
