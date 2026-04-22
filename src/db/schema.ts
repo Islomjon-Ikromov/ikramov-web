@@ -1,4 +1,10 @@
-import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -7,9 +13,11 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const waitlist = pgTable("waitlist", {
-  id: serial("id").primaryKey(),
+export const waitlistSignups = pgTable("waitlist_signups", {
+  id: uuid("id").primaryKey().defaultRandom(),
   email: text("email").notNull().unique(),
-  telegram: text("telegram"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  telegramHandle: text("telegram_handle"),
+  source: text("source").notNull().default("landing_v1"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  notes: text("notes"),
 });

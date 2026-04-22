@@ -8,6 +8,13 @@
       "when": 1776837004846,
       "tag": "0000_pretty_nightcrawler",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1745294400000,
+      "tag": "0001_waitlist_signups",
+      "breakpoints": true
     }
   ]
 }

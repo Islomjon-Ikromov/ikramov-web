@@ -1,7 +1,6 @@
 import { db } from "@/db";
-import { waitlist } from "@/db/schema";
+import { waitlistSignups } from "@/db/schema";
 import { desc } from "drizzle-orm";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -20,15 +19,25 @@ export default async function AdminWaitlistPage({
 
   const rows = await db
     .select()
-    .from(waitlist)
-    .orderBy(desc(waitlist.createdAt));
+    .from(waitlistSignups)
+    .orderBy(desc(waitlistSignups.createdAt));
+
+  const csvUrl = `/api/admin/waitlist/csv?token=${encodeURIComponent(token!)}`;
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="mx-auto max-w-3xl">
-        <h1 className="mb-6 text-2xl font-bold text-gray-900">
-          Waitlist ({rows.length})
-        </h1>
+      <div className="mx-auto max-w-4xl">
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">
+            Waitlist ({rows.length})
+          </h1>
+          <a
+            href={csvUrl}
+            className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+          >
+            Export CSV
+          </a>
+        </div>
         <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
           <table className="w-full text-sm">
             <thead className="bg-gray-100 text-xs uppercase text-gray-600">
@@ -36,6 +45,7 @@ export default async function AdminWaitlistPage({
                 <th className="px-4 py-3 text-left">#</th>
                 <th className="px-4 py-3 text-left">Email</th>
                 <th className="px-4 py-3 text-left">Telegram</th>
+                <th className="px-4 py-3 text-left">Source</th>
                 <th className="px-4 py-3 text-left">Signed up</th>
               </tr>
             </thead>
@@ -47,8 +57,9 @@ export default async function AdminWaitlistPage({
                     {row.email}
                   </td>
                   <td className="px-4 py-3 text-gray-600">
-                    {row.telegram ?? "—"}
+                    {row.telegramHandle ?? "—"}
                   </td>
+                  <td className="px-4 py-3 text-gray-500">{row.source}</td>
                   <td className="px-4 py-3 text-gray-500">
                     {new Date(row.createdAt).toLocaleString("ru-RU", {
                       timeZone: "Asia/Tashkent",
@@ -59,7 +70,7 @@ export default async function AdminWaitlistPage({
               {rows.length === 0 && (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={5}
                     className="px-4 py-8 text-center text-gray-400"
                   >
                     No signups yet.
